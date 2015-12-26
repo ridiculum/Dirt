@@ -33,7 +33,7 @@ typedef struct {
   int initialised;
 } t_loop;
 
-int wav_filter (const struct dirent *d);
+int wav_aif_filter (const struct dirent *d);
 extern void file_set_samplerate(int s);
 extern t_sample *file_get(char *samplename, const char *sampleroot);
 extern t_sample *file_get_from_cache(char *samplename);

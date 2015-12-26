@@ -55,13 +55,22 @@ t_sample *find_sample (char *samplename) {
   return(sample);
 }
 
-int wav_filter (const struct dirent *d) {
-  if (strlen(d->d_name) > 4) {
-    return(strcmp(d->d_name + strlen(d->d_name) - 4, ".wav") == 0
-           || strcmp(d->d_name + strlen(d->d_name) - 4, ".WAV") == 0
-           );
+int wav_aif_filter (const struct dirent *d) {
+  static const char *exts[] = {
+    ".wav", ".WAV",
+    ".aif", ".AIF",
+    ".aiff", ".AIFF",
+  };
+  static const size_t num_exts = sizeof exts / sizeof exts[0];
+  const char *ext = strrchr(d->d_name, '.');
+  if (!ext)
+    return 0;
+
+  for (size_t i = 0; i < num_exts; ++i) {
+    if (strcmp(ext, exts[i]) == 0)
+      return 1;
   }
-  return(0);
+  return 0;
 }
 
 void fix_samplerate (t_sample *sample) {
@@ -124,7 +133,7 @@ extern t_sample *file_get(char *samplename, const char *sampleroot) {
       int n;
       snprintf(path, MAXPATHSIZE -1, "%s/%s", sampleroot, set);
       //printf("looking in %s\n", set);
-      n = scandir(path, &namelist, wav_filter, alphasort);
+      n = scandir(path, &namelist, wav_aif_filter, alphasort);
       if (n > 0) {
         snprintf(path, MAXPATHSIZE -1,
 	    "%s/%s/%s", sampleroot, set, namelist[set_n % n]->d_name);

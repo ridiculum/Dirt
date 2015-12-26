@@ -1154,7 +1154,7 @@ void preload_kriol(char *dir) {
   struct dirent **namelist = NULL;
 
   snprintf(path, MAXPATHSIZE -1, "%s/%s", sampleroot, dir);
-  n = scandir(path, &namelist, wav_filter, alphasort);
+  n = scandir(path, &namelist, wav_aif_filter, alphasort);
   for (int i = 0; i < n; ++i) {
     snprintf(path, MAXPATHSIZE -1,
              "kriol_preload/%s", namelist[i]->d_name
